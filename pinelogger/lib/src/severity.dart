@@ -2,10 +2,14 @@
 class Severity {
   final String name;
   /// A lower number means a higher severity.
-  /// * 0 indicates no filtering (so all messages are shown).
-  /// * 2000 indicates that absolutely nothing is shown.
+  /// * 2000 indicates no filtering (so all messages are shown).
+  /// * 0 indicates that absolutely nothing is shown.
   final int index;
   const Severity(this.index, this.name) : assert(index > 0), assert(name != ""), assert(index < 2000);
+  /// For filters. Show all messages.
+  const Severity.all() : this.index = 2000, this.name = "ALL";
+  /// For filters. Show no messages.
+  const Severity.none() : this.index = 0, this.name = "NONE";
   /// Verbose messages are detailed and are shown at every step of a process.
   /// They're most useful for debugging.
   static const Severity verbose = Severity(10, "verbose");
@@ -33,7 +37,7 @@ class Severity {
 
   /// The name and index are checked for equality. If either one matches, it is
   /// considered an equal severity.
-  bool operator ==(Object other) => other is Severity && (other.name == name || other.index == index);
+  bool operator ==(Object other) => other is Severity && (other.name.toLowerCase() == name.toLowerCase() || other.index == index);
   /// Compares severity, not index.
   bool operator <(Severity other) => index > other.index;
   /// Compares severity, not index.
